@@ -1,0 +1,18 @@
+@charset "utf-8";
+:root,
+:root.red {
+  --primary-color: #ce113b;
+  --primary-active-font-color: #ffffff;
+  --primary-default-font-color: #454545;
+  --buton-font-color: #ffffff;
+  --common-frame-bg-color: #dbe4e3;
+  --title-font-color: #ce113b;
+}
+:root.pupple {
+  --primary-color: #5a2c99;
+  --primary-active-font-color: #ffffff;
+  --primary-default-font-color: #5a2c99;
+  --buton-font-color: #ffffff;
+  --common-frame-bg-color: #f6f6f680;
+  --title-font-color: #ffffff;
+}

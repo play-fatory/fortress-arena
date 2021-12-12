@@ -57,8 +57,7 @@ button {
   color: var(--primary-color);
 }
 
-button:hover,
-button:focus {
+button:hover {
   background: var(--primary-color);
   color: black;
   cursor: pointer;

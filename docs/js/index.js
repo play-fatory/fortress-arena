@@ -201,8 +201,6 @@ async function nftMint() {
     .on("error", (error) => {
       $("#minting-loading").hide();
       console.log(error);
-      // $(`#pending-sendDkey-tx`).html('(Transaction fail!)');
-      // $(`#pending-sendDkey-tx`).css('color', 'red');
     });
 }
 

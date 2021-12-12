@@ -13,6 +13,11 @@ let myAddr;
 let mintingFee;
 let totalsupplyInterval;
 
+const openseaurl = {
+  1: "https://testnets.opensea.io/assets/0x2e9f329691be10f2d6d59f980a27dab5d560b394/",
+  4: "https://testnets.opensea.io/assets/0x2e9f329691be10f2d6d59f980a27dab5d560b394/",
+};
+
 window.addEventListener("load", function () {
   loadWeb3();
   if (typeof window.web3 !== "undefined") {
@@ -268,9 +273,9 @@ showCardList = async (kind, tokenIds) => {
       descriptionBox.className = "descriptionBox";
       tokenId.className = "tokenID";
 
-      label.innerHTML = ``;
-      imgBox.innerHTML = `<label class="checkbox-label" for="checkBox${arr[i].tokenId}" />
-          <img style="width: auto; height: auto; max-width: 200px; "  src="${arr[i].image}" />         
+      label.innerHTML = "";
+      imgBox.innerHTML = `<label class="card-img" onclick="viewInOpensea(${arr[i].tokenId})" />
+          <img style="width: auto; height: auto; max-width: 200px; "  src="${arr[i].image}" ></img>
           `;
 
       tokenId.innerHTML = `#${arr[i].tokenId} </label>`;
@@ -294,3 +299,8 @@ showCardList = async (kind, tokenIds) => {
   cardsDeck(arr);
   $("#minting-loading").hide();
 };
+
+function viewInOpensea(tokenid) {
+  console.log("viewInOpensea =>", tokenid);
+  var popup = window.open(openseaurl[chainId] + tokenid, "OpenSea");
+}

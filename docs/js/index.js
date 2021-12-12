@@ -1,15 +1,16 @@
 const setTheme = (theme) => (document.documentElement.className = theme);
-setTheme("red"); // initialize
+setTheme("aquamarine"); // initialize
 
 let nftAddress = "0x2e9f329691be10f2d6d59f980a27dab5d560b394"; // rinkeby
-var nftContract;
+let nftContract;
 
-var chainId = 4;
-var networkList = {
+let chainId = 4;
+const networkList = {
   1: "Ethereum Mainnet",
   4: "Rinkeby Testnet",
 };
 let myAddr;
+let mintingFee;
 
 window.addEventListener("load", function () {
   loadWeb3();
@@ -113,3 +114,163 @@ async function getContracts() {
 async function getTotalSupply() {
   return nftContract.methods.totalSupply().call();
 }
+
+async function nftMint() {
+  /*
+        const options = {value: ethers.utils.parseEther(“1.0”)}
+        const reciept = await contract.buyPunk(1001, options);
+        nft.publicMint(10, options)    
+
+    */
+  $("#div-mint-result").hide();
+  $("#minting-loading").show();
+
+  // getMinting Fee
+  const fee_wei = await nftContract.methods.MINTING_FEE().call();
+  const fee_gwei = ethers.utils.formatUnits(fee_wei, 18);
+
+  const mintingCount = $("#claimcount option:selected").val();
+  const total_mintingfee = parseFloat(fee_gwei) * parseFloat(mintingCount);
+  console.log("total_mintingfee =>", total_mintingfee);
+
+  nftContract.methods
+    .publicMint(mintingCount)
+    .send({
+      from: myAddr,
+      value: ethers.utils.parseEther(total_mintingfee.toString()),
+    })
+    .on("transactionHash", (txid) => {
+      // console.log(`txid: ${txid}`)
+    })
+    .once("allEvents", (allEvents) => {
+      // console.log('allEvents')
+      // console.log(transferEvent)
+    })
+    .once("Transfer", (transferEvent) => {
+      // console.log('trasferEvent', transferEvent)
+    })
+    .once("receipt", (receipt) => {
+      $("#minting-loading").hide();
+      console.log("receipt => ", receipt);
+
+      if (receipt.status) {
+        $("#div-mint-result").show();
+        let resultTokenids = [];
+        if (Array.isArray(receipt.events.Transfer)) {
+          receipt.events.Transfer.map((tranfervalue) => {
+            console.log(
+              "receipt.events.Transfer => ",
+              tranfervalue.returnValues.tokenId
+            );
+            resultTokenids.push(tranfervalue.returnValues.tokenId);
+            console.log("resultTokenids => ", resultTokenids);
+          });
+        } else {
+          console.log(
+            "receipt.events.Transfer=>",
+            receipt.events.Transfer.returnValues.tokenId
+          );
+          resultTokenids.push(receipt.events.Transfer.returnValues.tokenId);
+          console.log("resultTokenids => ", resultTokenids);
+        }
+        showCardList("mintresult", resultTokenids);
+      }
+    })
+    .on("error", (error) => {
+      $("#minting-loading").hide();
+      console.log(error);
+      // $(`#pending-sendDkey-tx`).html('(Transaction fail!)');
+      // $(`#pending-sendDkey-tx`).css('color', 'red');
+    });
+}
+
+getCardInfo = async (tokenId) => {
+  try {
+    let tokenInfoBase64 = await nftContract.methods.tokenURI(tokenId).call();
+    let jsonInfo = JSON.parse(atob(tokenInfoBase64.substring(29)));
+    return jsonInfo;
+  } catch (errGetCardInfo) {
+    console.log(errGetCardInfo);
+  }
+};
+
+showCardList = async (kind, tokenIds) => {
+  console.log("showCardList kind =>", kind);
+  console.log("showCardList tokenIds =>", tokenIds);
+  $("#minting-loading").show();
+  let claimTokenIdList = [];
+
+  switch (kind) {
+    case "mintresult":
+      claimTokenIdList = tokenIds;
+      break;
+    case "mintedcards":
+      claimTokenIdList = await nftContract.methods.tokensOf(myAddr).call();
+      break;
+  }
+
+  let tokenId = claimTokenIdList;
+
+  let arr = [];
+
+  const cardInfoList = await Promise.all(
+    tokenId.map((id) => {
+      return getCardInfo(id);
+    })
+  );
+  cardInfoList.forEach((info, i) => {
+    arr.push({ tokenId: tokenId[i], image: info.image });
+  });
+
+  arr.sort(function (a, b) {
+    return parseFloat(a.tokenId) - parseFloat(b.tokenId);
+  });
+
+  // console.log(arr);
+  function cardsDeck(arr) {
+    switch (kind) {
+      case "mintresult":
+        document.getElementById("cards_deck").innerHTML = "";
+        break;
+      case "mintedcards":
+        document.getElementById("minted_cards_deck").innerHTML = "";
+        break;
+    }
+
+    for (let i = 0; i < arr.length; i++) {
+      let card = document.createElement("div");
+      let imgBox = document.createElement("div");
+      let descriptionBox = document.createElement("div");
+      let tokenId = document.createElement("div");
+      let label = document.createElement("div");
+      card.className = "card";
+      imgBox.className = "imgbox";
+      descriptionBox.className = "descriptionBox";
+      tokenId.className = "tokenID";
+
+      label.innerHTML = ``;
+      imgBox.innerHTML = `<label class="checkbox-label" for="checkBox${arr[i].tokenId}" />
+          <img style="width: auto; height: auto; max-width: 200px; "  src="${arr[i].image}" />         
+          `;
+
+      tokenId.innerHTML = `#${arr[i].tokenId} </label>`;
+      card.appendChild(imgBox);
+      card.appendChild(descriptionBox);
+      descriptionBox.appendChild(tokenId);
+      card.style.marginBottom = "10px";
+
+      switch (kind) {
+        case "mintresult":
+          document.getElementById("cards_deck").appendChild(card);
+          showCardList("mintedcards", null);
+          break;
+        case "mintedcards":
+          document.getElementById("minted_cards_deck").appendChild(card);
+          break;
+      }
+    }
+  }
+
+  cardsDeck(arr);
+  $("#minting-loading").hide();
+};

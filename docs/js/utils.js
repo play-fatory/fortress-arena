@@ -21,7 +21,7 @@ function getLink(addr, chainId) {
 
   if (addr.length == 42) {
     return (
-      '<a target="_blank" style="font-size: 14px; text-decoration: underline;color:#818181;" href="' +
+      '<a target="_blank" style="text-decoration: underline;color:#818181;" href="' +
       explorer +
       "/address/" +
       addr +
@@ -31,7 +31,7 @@ function getLink(addr, chainId) {
     );
   } else {
     return (
-      '<a target="_blank" style="font-size: 14px; text-decoration: underline;color:#818181;" href="' +
+      '<a target="_blank" style="text-decoration: underline;color:#818181;" href="' +
       explorer +
       "/tx/" +
       addr +

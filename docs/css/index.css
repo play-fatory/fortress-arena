@@ -64,6 +64,10 @@ button:focus {
   cursor: pointer;
 }
 
+p {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
 input {
   border: 1px solid var(--primary-color);
   padding-left: 20px;

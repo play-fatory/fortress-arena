@@ -11,6 +11,7 @@ const networkList = {
 };
 let myAddr;
 let mintingFee;
+let totalsupplyInterval;
 
 window.addEventListener("load", function () {
   loadWeb3();
@@ -73,6 +74,7 @@ async function getAccount() {
       $(".my-address").html(getLink(myAddr, chainId));
       $("#content_body").show();
       $("#connect-btn").hide();
+      getTotalSupply();
     } else {
       console.log("No ethereum account is available!");
       $("#div-myaddress").hide();
@@ -119,7 +121,19 @@ async function getContracts() {
   $(".nft-address").html(getLink(nftAddress, chainId));
 }
 async function getTotalSupply() {
-  return nftContract.methods.totalSupply().call();
+  clearInterval(totalsupplyInterval);
+
+  const maxPublic = await nftContract.methods.MAX_PUBLIC().call();
+  let totalsupply = 0;
+  totalsupply = await nftContract.methods.totalSupply().call();
+  console.log("totalsupply =>", totalsupply);
+  $(".claimedcnt").html(totalsupply + "/" + maxPublic);
+
+  totalsupplyInterval = setInterval(async function () {
+    totalsupply = await nftContract.methods.totalSupply().call();
+    console.log("totalsupply =>", totalsupply);
+    $(".claimedcnt").html(totalsupply + "/" + maxPublic);
+  }, 5000);
 }
 
 async function nftMint() {
@@ -180,6 +194,7 @@ async function nftMint() {
           resultTokenids.push(receipt.events.Transfer.returnValues.tokenId);
           console.log("resultTokenids => ", resultTokenids);
         }
+        getTotalSupply();
         showCardList("mintresult", resultTokenids);
       }
     })

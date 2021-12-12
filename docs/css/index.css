@@ -57,6 +57,13 @@ button {
   color: var(--primary-color);
 }
 
+button:hover,
+button:focus {
+  background: var(--primary-color);
+  color: black;
+  cursor: pointer;
+}
+
 input {
   border: 1px solid var(--primary-color);
   padding-left: 20px;

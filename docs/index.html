@@ -16,12 +16,12 @@
       </p>
     </div>
     <div class="frame-common">
-      <div id="connect-btn" style="display: none">
+      <div id="connect-btn" style="display: none; margin-bottom: 10px">
         <button onclick="connectWallet()">Connect Wallet</button>
       </div>
 
       <div>
-        <div>
+        <div id="div-myaddress" style="display: none">
           My Address :
           <span class="my-address" style="margin-right: 10px"></span>
         </div>
@@ -31,49 +31,50 @@
         </div>
       </div>
     </div>
-    <div class="frame-common">
-      <div>
-        <img class="mint-img" src="./asset/mint_bg.gif" />
+    <div id="content_body" style="display: none">
+      <div class="frame-common">
+        <div>
+          <img class="mint-img" src="./asset/mint_bg.gif" />
+        </div>
+        <div>
+          <select id="claimcount">
+            <option value="1" selected="selected">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+          </select>
+          <button style="margin-left: 10px" onclick="nftMint()">Claim</button>
+        </div>
       </div>
-      <div>
-        <select id="claimcount">
-          <option value="1" selected="selected">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
-          <option value="6">6</option>
-          <option value="7">7</option>
-          <option value="8">8</option>
-          <option value="9">9</option>
-          <option value="10">10</option>
-        </select>
-        <button style="margin-left: 10px" onclick="nftMint()">Claim</button>
-      </div>
-    </div>
 
-    <div id="div-mint-result" class="frame-common" style="display: none">
-      <div>
-        <p style="color: aquamarine; font-size: 20px">
-          <b>Claim Result</b>
-        </p>
+      <div id="div-mint-result" class="frame-common" style="display: none">
+        <div>
+          <p style="color: aquamarine; font-size: 20px">
+            <b>Claim Result</b>
+          </p>
+        </div>
+        <div class="cards-deck-outside">
+          <div id="cards_deck" class="deck"></div>
+        </div>
       </div>
-      <div class="cards-deck-outside">
-        <div id="cards_deck" class="deck"></div>
+      <div id="div-minted-cards" class="frame-common">
+        <button
+          onclick='showCardList("mintedcards",null)'
+          style="margin-bottom: 10px"
+        >
+          Show My Cards
+        </button>
+        <div class="cards-deck-outside">
+          <div id="minted_cards_deck" class="deck"></div>
+        </div>
       </div>
     </div>
-    <div id="div-minted-cards" class="frame-common">
-      <button
-        onclick='showCardList("mintedcards",null)'
-        style="margin-bottom: 10px"
-      >
-        Show My Cards
-      </button>
-      <div class="cards-deck-outside">
-        <div id="minted_cards_deck" class="deck"></div>
-      </div>
-    </div>
-
     <!-- Script -->
     <script src="./js/1.2.11-web3-min.js"></script>
     <script src="./js/5.2-umd-min.js" type="application/javascript"></script>

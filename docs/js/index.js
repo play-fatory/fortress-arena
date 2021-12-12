@@ -68,14 +68,21 @@ async function getAccount() {
     if (accounts.length > 0) {
       // myAddr = web3.utils.toChecksumAddress(accounts[0]);
       myAddr = accounts[0];
+
+      $("#div-myaddress").show();
       $(".my-address").html(getLink(myAddr, chainId));
+      $("#content_body").show();
       $("#connect-btn").hide();
     } else {
       console.log("No ethereum account is available!");
+      $("#div-myaddress").hide();
+      $("#content_body").hide();
       $("#connect-btn").show();
     }
   } catch (err) {
     console.log("getAccount => ", err);
+    $("#div-myaddress").hide();
+    $("#content_body").hide();
     $("#connect-btn").show();
     $(".my-address").html("");
   }

@@ -8,12 +8,21 @@
     ></script>
   </head>
   <body>
-    <button onclick="connectWallet()">Connect Wallet</button>
+    <div id="connect-btn" style="display: none">
+      <button onclick="connectWallet()">Connect Wallet</button>
+    </div>
+
     <div style="display: flex; justify-items: flex-end; align-items: center">
       My Address : <span class="my-address" style="margin-right: 10px"></span>
     </div>
+    <div style="display: flex; justify-items: flex-end; align-items: center">
+      NFT Address : <span class="nft-address" style="margin-right: 10px"></span>
+    </div>
+
     <script src="./js/1.2.11-web3-min.js"></script>
     <script src="./js/5.2-umd-min.js" type="application/javascript"></script>
     <script src="./js/index.js" type="application/javascript"></script>
+    <script src="./contractabi/ntfAbi.js" type=" text/javascript"></script>
+    <script src="./js/utils.js" type=" text/javascript"></script>
   </body>
 </html>

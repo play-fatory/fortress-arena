@@ -56,7 +56,15 @@ async function startApp() {
     var currentChainId = await web3.eth.getChainId();
     chainId = currentChainId;
 
-    await getAccount();
+    if (chainId == 1 || chainId == 4) {
+      $("#div-network").show();
+      $("#network-info").hide();
+      $(".current-network").html(networkList[chainId]);
+      await getAccount();
+    } else {
+      $("#div-network").hide();
+      $("#network-info").show();
+    }
 
     // initializeClock();
   } catch (err) {

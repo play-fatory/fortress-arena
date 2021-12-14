@@ -94,7 +94,7 @@ async function getAccount() {
       // getMinting Fee
       const fee_wei = await nftContract.methods.MINTING_FEE().call();
       const fee_gwei = ethers.utils.formatUnits(fee_wei, 18);
-      $(".mintingfee").html("[ " + fee_gwei + "ETH ]");
+      $(".mintingfee").html("[ " + fee_gwei + " ETH ]");
     } else {
       console.log("No ethereum account is available!");
       $("#div-myaddress").hide();
@@ -315,6 +315,9 @@ showCardList = async (kind, tokenIds) => {
           }
           break;
         case "mintedcards":
+          $("#showcard-btn").hide();
+          $(".mycardscnt").html("My Cards : " + arr.length);
+
           document.getElementById("minted_cards_deck").appendChild(card);
           break;
       }

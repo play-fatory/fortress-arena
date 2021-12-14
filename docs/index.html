@@ -89,9 +89,19 @@
         </div>
       </div>
       <div id="div-minted-cards" class="frame-common">
-        <button onclick="showMyCards()" style="margin-bottom: 10px">
+        <button
+          id="showcard-btn"
+          onclick="showMyCards()"
+          style="margin-bottom: 10px"
+        >
           Show My Cards
         </button>
+        <div>
+          <p
+            class="mycardscnt"
+            style="color: var(--primary-color); font-size: 20px"
+          ></p>
+        </div>
         <div class="cards-deck-outside">
           <div id="minted_cards_deck" class="deck"></div>
         </div>

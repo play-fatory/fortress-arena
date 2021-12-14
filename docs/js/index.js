@@ -96,7 +96,7 @@ async function getAccount() {
       const fee_gwei = ethers.utils.formatUnits(fee_wei, 18);
       $(".mintingfee").html("[ " + fee_gwei + " ETH ]");
       $(".description").html(
-        "This is the Fortress Arena TANK NFT minting page.<br>The price of 1 TANK NFT is " +
+        "The price of 1 TANK NFT is " +
           fee_gwei +
           " ETH, and you can claim up to 10 at a time."
       );
@@ -105,12 +105,18 @@ async function getAccount() {
       $("#div-myaddress").hide();
       $("#content_body").hide();
       $("#connect-btn").show();
+      $(".description").html(
+        "To participate in minting, click the Connect Wallet button to connect your wallet."
+      );
     }
   } catch (err) {
     console.log("getAccount => ", err);
     $("#div-myaddress").hide();
     $("#content_body").hide();
     $("#connect-btn").show();
+    $(".description").html(
+      "To participate in minting, click the Connect Wallet button to connect your wallet."
+    );
     $(".my-address").html("");
   }
 }

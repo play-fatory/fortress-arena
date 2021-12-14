@@ -95,6 +95,11 @@ async function getAccount() {
       const fee_wei = await nftContract.methods.MINTING_FEE().call();
       const fee_gwei = ethers.utils.formatUnits(fee_wei, 18);
       $(".mintingfee").html("[ " + fee_gwei + " ETH ]");
+      $(".description").html(
+        "This is the Fortress Arena TANK NFT minting page.<br>The price of 1 TANK NFT is " +
+          fee_gwei +
+          " ETH, and you can claim up to 10 at a time."
+      );
     } else {
       console.log("No ethereum account is available!");
       $("#div-myaddress").hide();

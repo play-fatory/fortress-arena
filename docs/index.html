@@ -24,7 +24,7 @@
       <div id="network-info" style="display: block; text-align: center">
         <div>
           <p style="color: #ffffff">
-            Check your wallet is connected to the Ethereum Mainnet.
+            Check your wallet is connected to the Rinkeby Testnet.
           </p>
         </div>
       </div>
@@ -46,6 +46,12 @@
     </div>
     <div id="content_body" style="display: none">
       <div class="frame-common">
+        <div>
+          <p
+            class="mintingfee"
+            style="color: var(--primary-color); font-size: 20px"
+          ></p>
+        </div>
         <div>
           <img class="mint-img" src="./asset/mint_bg.gif" />
         </div>
@@ -83,10 +89,7 @@
         </div>
       </div>
       <div id="div-minted-cards" class="frame-common">
-        <button
-          onclick='showCardList("mintedcards",null)'
-          style="margin-bottom: 10px"
-        >
+        <button onclick="showMyCards()" style="margin-bottom: 10px">
           Show My Cards
         </button>
         <div class="cards-deck-outside">

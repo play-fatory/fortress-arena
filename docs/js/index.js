@@ -13,6 +13,8 @@ let myAddr;
 let mintingFee;
 let totalsupplyInterval;
 
+let openMyCardsView = false;
+
 const openseaurl = {
   1: "https://testnets.opensea.io/assets/0x2e9f329691be10f2d6d59f980a27dab5d560b394/",
   4: "https://testnets.opensea.io/assets/0x2e9f329691be10f2d6d59f980a27dab5d560b394/",
@@ -56,7 +58,8 @@ async function startApp() {
     var currentChainId = await web3.eth.getChainId();
     chainId = currentChainId;
 
-    if (chainId == 1 || chainId == 4) {
+    // if (chainId == 1 || chainId == 4) {
+    if (chainId == 4) {
       $("#div-network").show();
       $("#network-info").hide();
       $(".current-network").html(networkList[chainId]);
@@ -88,6 +91,10 @@ async function getAccount() {
       $("#content_body").show();
       $("#connect-btn").hide();
       getTotalSupply();
+      // getMinting Fee
+      const fee_wei = await nftContract.methods.MINTING_FEE().call();
+      const fee_gwei = ethers.utils.formatUnits(fee_wei, 18);
+      $(".mintingfee").html("[ " + fee_gwei + "ETH ]");
     } else {
       console.log("No ethereum account is available!");
       $("#div-myaddress").hide();
@@ -142,11 +149,12 @@ async function getTotalSupply() {
   console.log("totalsupply =>", totalsupply);
   $(".claimedcnt").html(totalsupply + "/" + maxPublic);
 
+  // update every 2sec
   totalsupplyInterval = setInterval(async function () {
     totalsupply = await nftContract.methods.totalSupply().call();
     console.log("totalsupply =>", totalsupply);
     $(".claimedcnt").html(totalsupply + "/" + maxPublic);
-  }, 5000);
+  }, 2000);
 }
 
 async function nftMint() {
@@ -156,6 +164,8 @@ async function nftMint() {
         nft.publicMint(10, options)    
 
     */
+  // window.scrollTo(0, 0);
+  $("html, body").animate({ scrollTop: 0 }, "slow");
   $("#div-mint-result").hide();
   $("#minting-loading").show();
 
@@ -227,6 +237,11 @@ getCardInfo = async (tokenId) => {
   }
 };
 
+function showMyCards() {
+  openMyCardsView = true;
+  showCardList("mintedcards", null);
+}
+
 showCardList = async (kind, tokenIds) => {
   console.log("showCardList kind =>", kind);
   console.log("showCardList tokenIds =>", tokenIds);
@@ -295,7 +310,9 @@ showCardList = async (kind, tokenIds) => {
       switch (kind) {
         case "mintresult":
           document.getElementById("cards_deck").appendChild(card);
-          showCardList("mintedcards", null);
+          if (openMyCardsView) {
+            showCardList("mintedcards", null);
+          }
           break;
         case "mintedcards":
           document.getElementById("minted_cards_deck").appendChild(card);

@@ -1,7 +1,8 @@
 const setTheme = (theme) => (document.documentElement.className = theme);
 setTheme("aquamarine"); // initialize
 
-let nftAddress = "0x2e9f329691be10f2d6d59f980a27dab5d560b394"; // rinkeby
+// let nftAddress = "0x2e9f329691be10f2d6d59f980a27dab5d560b394"; // rinkeby old
+let nftAddress = "0xe43ed3a4fa0b9850ce4ecc3e5e550ecf7ce45d4f"; // rinkeby
 let nftContract;
 
 let chainId = 4;
@@ -14,11 +15,15 @@ let mintingFee;
 let totalsupplyInterval;
 
 let openMyCardsView = false;
+let mintingState = 0; // 0:minting is not allowed , 1: pre minting , 2: public minting , 3: public minting is not allowed
+let multiCount = 0;
 
 const openseaurl = {
   1: "https://testnets.opensea.io/assets/0x2e9f329691be10f2d6d59f980a27dab5d560b394/",
-  4: "https://testnets.opensea.io/assets/0x2e9f329691be10f2d6d59f980a27dab5d560b394/",
+  4: "https://testnets.opensea.io/assets/0xe43ed3a4fa0b9850ce4ecc3e5e550ecf7ce45d4f/",
 };
+// 4: "https://testnets.opensea.io/assets/0x2e9f329691be10f2d6d59f980a27dab5d560b394/",
+// 4: "https://testnets.opensea.io/assets/0x33991d6d07a58cdb9ac54a0414d10f19540d1838/",
 
 window.addEventListener("load", function () {
   loadWeb3();
@@ -150,11 +155,20 @@ function connectWallet() {
 async function getContracts() {
   nftContract = new web3.eth.Contract(nftAbi, nftAddress);
   $(".nft-address").html(getLink(nftAddress, chainId));
+  $(".opensea-address").html(getOpenSeaLink(chainId));
+  getMintingState();
 }
+
+async function getMintingState() {
+  mintingState = await nftContract.methods.getMintingState().call();
+
+  getMultiClaimCount();
+}
+
 async function getTotalSupply() {
   clearInterval(totalsupplyInterval);
 
-  const maxPublic = await nftContract.methods.MAX_PUBLIC().call();
+  const maxPublic = await nftContract.methods.MAX_PUBLIC_ID().call();
   let totalsupply = 0;
   totalsupply = await nftContract.methods.totalSupply().call();
   console.log("totalsupply =>", totalsupply);
@@ -168,6 +182,48 @@ async function getTotalSupply() {
   }, 2000);
 }
 
+async function getMultiClaimCount() {
+  let claimcount = document.getElementById("claimcount");
+  let optionItem = "";
+  switch (mintingState.toString()) {
+    case "1":
+      multiCount = await nftContract.methods.MAX_PRE_MULTI().call();
+      break;
+    case "2":
+      multiCount = await nftContract.methods.MAX_PUBLIC_MULTI().call();
+
+      break;
+    default:
+      multiCount = 0;
+      break;
+  }
+  console.log("multiCount -> ", multiCount);
+  for (let i = 1; i < parseInt(multiCount) + 1; i++) {
+    if (i === 1) {
+      optionItem =
+        optionItem +
+        '<option value="' +
+        i +
+        '" selected="selected">' +
+        i +
+        "</option>";
+    } else {
+      optionItem = optionItem + '<option value="' + i + '" >' + i + "</option>";
+    }
+  }
+  // console.log("optionItem -> ", optionItem);
+  // <option value="1" selected="selected">1</option>
+  // <option value="2">2</option>
+  // <option value="3">3</option>
+  // <option value="4">4</option>
+  // <option value="5">5</option>
+  // <option value="6">6</option>
+  // <option value="7">7</option>
+  // <option value="8">8</option>
+  // <option value="9">9</option>
+  // <option value="10">10</option>
+  claimcount.innerHTML = optionItem;
+}
 async function nftMint() {
   /*
         const options = {value: ethers.utils.parseEther(“1.0”)}
@@ -176,66 +232,77 @@ async function nftMint() {
 
     */
   // window.scrollTo(0, 0);
-  $("html, body").animate({ scrollTop: 0 }, "slow");
+  $("html, body").animate({ scrollTop: 100 }, "slow");
   $("#div-mint-result").hide();
   $("#minting-loading").show();
 
-  // getMinting Fee
-  const fee_wei = await nftContract.methods.MINTING_FEE().call();
-  const fee_gwei = ethers.utils.formatUnits(fee_wei, 18);
+  console.log("mintingState -> ", mintingState);
+  switch (mintingState.toString()) {
+    case "1":
+      // pre minting
+      mintMethod = "preMint";
+      break;
+    case "2":
+      // public minting
+      console.log("public Minting");
+      // getMinting Fee
+      const fee_wei = await nftContract.methods.MINTING_FEE().call();
+      const fee_gwei = ethers.utils.formatUnits(fee_wei, 18);
 
-  const mintingCount = $("#claimcount option:selected").val();
-  const total_mintingfee = parseFloat(fee_gwei) * parseFloat(mintingCount);
-  console.log("total_mintingfee =>", total_mintingfee);
+      const mintingCount = $("#claimcount option:selected").val();
+      const total_mintingfee = parseFloat(fee_gwei) * parseFloat(mintingCount);
+      console.log("total_mintingfee =>", total_mintingfee);
 
-  nftContract.methods
-    .publicMint(mintingCount)
-    .send({
-      from: myAddr,
-      value: ethers.utils.parseEther(total_mintingfee.toString()),
-    })
-    .on("transactionHash", (txid) => {
-      // console.log(`txid: ${txid}`)
-    })
-    .once("allEvents", (allEvents) => {
-      // console.log('allEvents')
-      // console.log(transferEvent)
-    })
-    .once("Transfer", (transferEvent) => {
-      // console.log('trasferEvent', transferEvent)
-    })
-    .once("receipt", (receipt) => {
-      $("#minting-loading").hide();
-      console.log("receipt => ", receipt);
+      nftContract.methods
+        .publicMint(mintingCount)
+        .send({
+          from: myAddr,
+          value: ethers.utils.parseEther(total_mintingfee.toString()),
+        })
+        .on("transactionHash", (txid) => {
+          // console.log(`txid: ${txid}`)
+        })
+        .once("allEvents", (allEvents) => {
+          // console.log('allEvents')
+          // console.log(transferEvent)
+        })
+        .once("Transfer", (transferEvent) => {
+          // console.log('trasferEvent', transferEvent)
+        })
+        .once("receipt", (receipt) => {
+          $("#minting-loading").hide();
+          console.log("receipt => ", receipt);
 
-      if (receipt.status) {
-        $("#div-mint-result").show();
-        let resultTokenids = [];
-        if (Array.isArray(receipt.events.Transfer)) {
-          receipt.events.Transfer.map((tranfervalue) => {
-            console.log(
-              "receipt.events.Transfer => ",
-              tranfervalue.returnValues.tokenId
-            );
-            resultTokenids.push(tranfervalue.returnValues.tokenId);
-            console.log("resultTokenids => ", resultTokenids);
-          });
-        } else {
-          console.log(
-            "receipt.events.Transfer=>",
-            receipt.events.Transfer.returnValues.tokenId
-          );
-          resultTokenids.push(receipt.events.Transfer.returnValues.tokenId);
-          console.log("resultTokenids => ", resultTokenids);
-        }
-        getTotalSupply();
-        showCardList("mintresult", resultTokenids);
-      }
-    })
-    .on("error", (error) => {
-      $("#minting-loading").hide();
-      console.log(error);
-    });
+          if (receipt.status) {
+            $("#div-mint-result").show();
+            let resultTokenids = [];
+            if (Array.isArray(receipt.events.Transfer)) {
+              receipt.events.Transfer.map((tranfervalue) => {
+                console.log(
+                  "receipt.events.Transfer => ",
+                  tranfervalue.returnValues.tokenId
+                );
+                resultTokenids.push(tranfervalue.returnValues.tokenId);
+                console.log("resultTokenids => ", resultTokenids);
+              });
+            } else {
+              console.log(
+                "receipt.events.Transfer=>",
+                receipt.events.Transfer.returnValues.tokenId
+              );
+              resultTokenids.push(receipt.events.Transfer.returnValues.tokenId);
+              console.log("resultTokenids => ", resultTokenids);
+            }
+            getTotalSupply();
+            showCardList("mintresult", resultTokenids);
+          }
+        })
+        .on("error", (error) => {
+          $("#minting-loading").hide();
+          console.log(error);
+        });
+      break;
+  }
 }
 
 getCardInfo = async (tokenId) => {

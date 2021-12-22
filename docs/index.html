@@ -45,6 +45,10 @@
           NFT Address :
           <span class="nft-address" style="margin-right: 10px"></span>
         </div>
+        <div>
+          Opensea Collection :
+          <span class="opensea-address" style="margin-right: 10px"></span>
+        </div>
       </div>
     </div>
     <div class="frame-common">
@@ -73,26 +77,17 @@
           ></p>
         </div>
         <div>
-          <select id="claimcount">
-            <option value="1" selected="selected">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-            <option value="10">10</option>
-          </select>
-          <button style="margin-left: 10px" onclick="nftMint()">Claim</button>
+          <select id="claimcount"></select>
+          <button style="margin-left: 10px" onclick="nftMint()">
+            Mint Now
+          </button>
         </div>
       </div>
 
       <div id="div-mint-result" class="frame-common" style="display: none">
         <div>
           <p style="color: var(--primary-color); font-size: 20px">
-            <b>Claim Result</b>
+            <b>Mint Result</b>
           </p>
         </div>
         <div class="cards-deck-outside">
@@ -123,6 +118,7 @@
     <script src="./js/5.2-umd-min.js" type="application/javascript"></script>
     <script src="./js/index.js" type="application/javascript"></script>
     <script src="./contractabi/ntfAbi.js" type=" text/javascript"></script>
+    <!-- <script src="./contractabi/ntfAbi_old.js" type=" text/javascript"></script> -->
     <script src="./js/utils.js" type=" text/javascript"></script>
   </body>
 </html>

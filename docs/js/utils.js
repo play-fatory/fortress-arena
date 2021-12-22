@@ -41,3 +41,21 @@ function getLink(addr, chainId) {
     );
   }
 }
+
+function getOpenSeaLink(chainId) {
+  var explorer;
+  if (chainId == 1) {
+    explorer = "https://testnets.opensea.io/collection/fortress-arena-nft-v3";
+  } else if (chainId == 4) {
+    explorer = "https://testnets.opensea.io/collection/fortress-arena-nft-v3";
+  } else {
+    explorer = "";
+    console.log("unsupported chainid " + chainId);
+  }
+
+  return (
+    '<a target="_blank" style="text-decoration: underline;color:#818181;" href="' +
+    explorer +
+    '">Fortress-Arena NFT</a>'
+  );
+}

@@ -21,7 +21,7 @@ function getLink(addr, chainId) {
 
   if (addr.length == 42) {
     return (
-      '<a target="_blank" style="text-decoration: underline;color:#818181;" href="' +
+      '<a target="_blank" style="text-decoration: underline;color:coral;" href="' +
       explorer +
       "/address/" +
       addr +
@@ -31,7 +31,7 @@ function getLink(addr, chainId) {
     );
   } else {
     return (
-      '<a target="_blank" style="text-decoration: underline;color:#818181;" href="' +
+      '<a target="_blank" style="text-decoration: underline;color:coral;" href="' +
       explorer +
       "/tx/" +
       addr +
@@ -54,12 +54,12 @@ function getOpenSeaLink(chainId) {
   }
 
   return (
-    '<a target="_blank" style="text-decoration: underline;color:#818181;" href="' +
+    '<a target="_blank" style="text-decoration: underline;color:coral;" href="' +
     explorer +
     '">Fortress-Arena NFT</a>'
   );
 }
 
 function getGuideLink() {
-  return '<a target="_blank" style="text-decoration: underline;color:#818181;" href="/mintingguide.html">Show Minting Guide</a>';
+  return '<a target="_blank" style="text-decoration: underline;color:coral;" href="/mintingguide.html">Show Minting Guide</a>';
 }

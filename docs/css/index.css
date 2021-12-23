@@ -33,8 +33,8 @@ body {
   font-weight: 300;
   line-height: 1.4;
   margin: 0 auto;
-  padding-top: 20px;
-  padding-bottom: 20px;
+  /* padding-top: 20px;
+  padding-bottom: 20px; */
 }
 
 div {
@@ -154,6 +154,9 @@ select {
   justify-content: center;
 }
 .content-div {
-  max-width: 800px;
+  max-width: 900px;
   width: 100%;
+  backdrop-filter: brightness(50%) blur(50px);
+  padding-top: 30px;
+  padding-bottom: 30px;
 }

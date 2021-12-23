@@ -25,6 +25,16 @@
     </div>
     <div class="content-div">
       <div id="minting-loading"><div class="spinner"></div></div>
+      <!-- <div class="modal-popup">
+        <div class="modal_body">
+          <div id="popup-content">
+            <p>There are not enough cards to mint.</p>
+          </div>
+          <div>
+            <button onclick="closePopup()">Close</button>
+          </div>
+        </div>
+      </div> -->
       <div>
         <p
           class="minting-title"
@@ -118,6 +128,16 @@
               <button style="margin-left: 10px" onclick="nftMint()">
                 Mint Now
               </button>
+            </div>
+            <div>
+              <p
+                id="minterror"
+                style="
+                  color: var(--second-color);
+                  font-size: 24px;
+                  display: none;
+                "
+              ></p>
             </div>
           </div>
 

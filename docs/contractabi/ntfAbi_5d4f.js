@@ -211,16 +211,6 @@ let nftAbi = [
   },
   {
     inputs: [
-      { internalType: "uint256[]", name: "_tokenIds", type: "uint256[]" },
-      { internalType: "address[]", name: "_tos", type: "address[]" },
-    ],
-    name: "adminMintTo",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
       { internalType: "address", name: "to", type: "address" },
       { internalType: "uint256", name: "tokenId", type: "uint256" },
     ],
@@ -292,7 +282,7 @@ let nftAbi = [
   {
     inputs: [],
     name: "getCurrentPublicId",
-    outputs: [{ internalType: "uint16", name: "", type: "uint16" }],
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
     stateMutability: "view",
     type: "function",
   },
@@ -340,6 +330,13 @@ let nftAbi = [
     name: "getSigner",
     outputs: [{ internalType: "address", name: "", type: "address" }],
     stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "uint16", name: "_increase", type: "uint16" }],
+    name: "increaseMaxPublicId",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
   {
@@ -535,16 +532,6 @@ let nftAbi = [
   },
   {
     inputs: [
-      { internalType: "uint256[]", name: "_tokenIds", type: "uint256[]" },
-      { internalType: "address", name: "_to", type: "address" },
-    ],
-    name: "transferBatch",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
       { internalType: "address", name: "from", type: "address" },
       { internalType: "address", name: "to", type: "address" },
       { internalType: "uint256", name: "tokenId", type: "uint256" },
@@ -571,13 +558,6 @@ let nftAbi = [
   {
     inputs: [{ internalType: "address", name: "tankGene_", type: "address" }],
     name: "updateGene",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [{ internalType: "uint16", name: "_newMax", type: "uint16" }],
-    name: "updateMaxPublicId",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",

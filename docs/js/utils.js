@@ -63,3 +63,48 @@ function getOpenSeaLink(chainId) {
 function getGuideLink() {
   return '<a target="_blank" style="text-decoration: underline;color:coral;" href="/mintingguide.html">Show Minting Guide</a>';
 }
+
+async function apiPost(host, resource, data, accessToken) {
+  // console.log("apiPost host =>", host);
+  // console.log("apiPost data =>", data);
+  const headers = {
+    "Content-Type": "application/json",
+    Accept: "application/json",
+  };
+  if (accessToken) {
+    headers["Authorization"] = "Bearer " + accessToken;
+  }
+  const url = host + resource;
+  return await fetch(url, {
+    method: "POST",
+    cache: "no-cache",
+    headers: headers,
+    body: JSON.stringify(data),
+  });
+}
+
+async function getPreMintSig(contract, address) {
+  let api = "https://ipfs-gateway.atomrigs.io/api/";
+  const resource = "get_sig";
+  data = { contract, address, method: "preMint" };
+  res = await apiPost(api, resource, data);
+  json = await res.json();
+  // console.log("res => ", res);
+  if (res.status == 200) {
+    return json;
+
+    /* json
+  {
+      "keyAddr": "0x9DB5171227C41198384442DA05B3938D1603c981",
+      "hash": "0x7fb37f612b4edd66d4aaf9369c7984a5d467fff4b5c43ee2d49208ae252b2c1b",
+      "v": 27,
+      "r": "0x4b92550cf7df4b5304d14d6a50662b9752d08606c98b9663332ef120caf157ad",
+      "s": "0x784e02b64a49f100c4067661d451c2dacf027194a927fb78f73c933dbadb5a1f"
+  }
+  */
+  } else {
+    console.log("apiPost error => ", json.err);
+    // return json.err;
+    return null;
+  }
+}

@@ -153,3 +153,7 @@ select {
   margin: 10px;
   justify-content: center;
 }
+.content-div {
+  max-width: 800px;
+  width: 100%;
+}

@@ -85,8 +85,7 @@ async function getAccount() {
     await getContracts();
 
     var accounts = await web3.eth.getAccounts();
-    console.log("accounts => ", accounts);
-    console.log("getAccount() => chainId => ", chainId);
+
     if (accounts.length > 0) {
       // myAddr = web3.utils.toChecksumAddress(accounts[0]);
       myAddr = accounts[0];
@@ -101,8 +100,9 @@ async function getAccount() {
       $("#div-myaddress").hide();
       $("#content_body").hide();
       $("#connect-btn").show();
+
       $(".description").html(
-        "To participate in minting, click the Connect Wallet button to connect your wallet."
+        "<p>To participate in minting, click the Connect Wallet button to connect your wallet.</p>"
       );
     }
   } catch (err) {
@@ -111,7 +111,7 @@ async function getAccount() {
     $("#content_body").hide();
     $("#connect-btn").show();
     $(".description").html(
-      "To participate in minting, click the Connect Wallet button to connect your wallet."
+      "<p>To participate in minting, click the Connect Wallet button to connect your wallet.</p>"
     );
     $(".my-address").html("");
   }
@@ -194,7 +194,7 @@ async function getMultiClaimCount() {
       $(".minting-title").html("<b>Fortress Arena Minting (Pre-sale)</b>");
 
       $(".description").html(
-        "You can claim up to " + multiCount + " at a time."
+        "<p>You can claim up to " + multiCount + " at a time.</p>"
       );
 
       break;
@@ -204,11 +204,11 @@ async function getMultiClaimCount() {
       $(".minting-title").html("<b>Fortress Arena Minting (Public sale)</b>");
       $(".mintingfee").html("[ " + fee_gwei + " ETH ]");
       $(".description").html(
-        "The price of 1 TANK NFT is " +
+        "<p>The price of 1 TANK NFT is " +
           fee_gwei +
           " ETH, and you can claim up to " +
           multiCount +
-          " at a time."
+          " at a time.</p>"
       );
 
       break;

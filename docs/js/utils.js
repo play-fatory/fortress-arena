@@ -59,3 +59,7 @@ function getOpenSeaLink(chainId) {
     '">Fortress-Arena NFT</a>'
   );
 }
+
+function getGuideLink() {
+  return '<a target="_blank" style="text-decoration: underline;color:#818181;" href="/mintingguide.html">Show Minting Guide</a>';
+}

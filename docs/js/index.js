@@ -96,26 +96,6 @@ async function getAccount() {
       $("#content_body").show();
       $("#connect-btn").hide();
       await getTotalSupply();
-      // getMinting Fee
-      const fee_wei = await nftContract.methods.MINTING_FEE().call();
-      const fee_gwei = ethers.utils.formatUnits(fee_wei, 18);
-      console.log("mintingState =>", mintingState);
-      if (mintingState === 2) {
-        // public mint
-        $(".mintingfee").html("[ " + fee_gwei + " ETH ]");
-        $(".description").html(
-          "The price of 1 TANK NFT is " +
-            fee_gwei +
-            " ETH, and you can claim up to " +
-            multiCount +
-            " at a time."
-        );
-      } else if (mintingState === 1) {
-        // pre-mint
-        $(".description").html(
-          "You can claim up to " + multiCount + " at a time."
-        );
-      }
     } else {
       console.log("No ethereum account is available!");
       $("#div-myaddress").hide();
@@ -172,6 +152,7 @@ async function getContracts() {
 
 async function getMintingState() {
   mintingState = await nftContract.methods.getMintingState().call();
+
   if (mintingState === 0 || mintingState === 3) {
     $("#comingsoon-div").show();
     $("#minting-body").hide();
@@ -202,14 +183,33 @@ async function getTotalSupply() {
 async function getMultiClaimCount() {
   let claimcount = document.getElementById("claimcount");
   let optionItem = "";
+  // getMinting Fee
+  const fee_wei = await nftContract.methods.MINTING_FEE().call();
+  const fee_gwei = ethers.utils.formatUnits(fee_wei, 18);
+
   switch (mintingState.toString()) {
     // pre-mint
     case "1":
       multiCount = await nftContract.methods.MAX_PRE_MULTI().call();
+      $(".minting-title").html("<b>Fortress Arena Minting (Pre-sale)</b>");
+
+      $(".description").html(
+        "You can claim up to " + multiCount + " at a time."
+      );
+
       break;
     case "2":
       // public mint
       multiCount = await nftContract.methods.MAX_PUBLIC_MULTI().call();
+      $(".minting-title").html("<b>Fortress Arena Minting (Public sale)</b>");
+      $(".mintingfee").html("[ " + fee_gwei + " ETH ]");
+      $(".description").html(
+        "The price of 1 TANK NFT is " +
+          fee_gwei +
+          " ETH, and you can claim up to " +
+          multiCount +
+          " at a time."
+      );
 
       break;
     default:
@@ -217,6 +217,7 @@ async function getMultiClaimCount() {
       break;
   }
   console.log("multiCount -> ", multiCount);
+
   for (let i = 1; i < parseInt(multiCount) + 1; i++) {
     if (i === 1) {
       optionItem =

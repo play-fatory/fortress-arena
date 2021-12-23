@@ -11,108 +11,117 @@
   <body>
     <div id="minting-loading"><div class="spinner"></div></div>
     <div>
-      <p style="color: var(--primary-color); font-size: 30px">
+      <p style="color: var(--primary-color); font-size: 40px">
         <b>Fortress Arena Minting</b>
       </p>
     </div>
-    <div class="frame-common">
-      <div id="div-network">
-        Current Network :
-        <span class="current-network" style="margin-right: 10px"></span>
-      </div>
+    <div>
+      <div class="frame-common">
+        <div id="div-network">
+          Current Network :
+          <span class="current-network" style="margin-right: 10px"></span>
+        </div>
 
-      <div id="network-info" style="display: block; text-align: center">
-        <div>
-          <p style="color: #ffffff">
-            Check your wallet is connected to the Rinkeby Testnet.
-          </p>
+        <div id="network-info" style="display: block; text-align: center">
+          <div>
+            <p style="color: #ffffff">
+              Check your wallet is connected to the Rinkeby Testnet.
+            </p>
+          </div>
         </div>
-      </div>
 
-      <div
-        id="connect-btn"
-        style="display: none; margin-bottom: 10px; margin-top: 10px"
-      >
-        <button onclick="connectWallet()">Connect Wallet</button>
-      </div>
+        <div
+          id="connect-btn"
+          style="display: none; margin-bottom: 10px; margin-top: 10px"
+        >
+          <button onclick="connectWallet()">Connect Wallet</button>
+        </div>
 
-      <div>
-        <div id="div-myaddress" style="display: none">
-          My Address :
-          <span class="my-address" style="margin-right: 10px"></span>
-        </div>
         <div>
-          NFT Address :
-          <span class="nft-address" style="margin-right: 10px"></span>
-        </div>
-        <div>
-          Opensea Collection :
-          <span class="opensea-address" style="margin-right: 10px"></span>
+          <div id="div-myaddress" style="display: none">
+            My Address :
+            <span class="my-address" style="margin-right: 10px"></span>
+          </div>
+          <div>
+            NFT Address :
+            <span class="nft-address" style="margin-right: 10px"></span>
+          </div>
+          <div>
+            Opensea Collection :
+            <span class="opensea-address" style="margin-right: 10px"></span>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="frame-common">
-      <div>
-        <p style="color: #ffffff">
-          This is the Fortress Arena TANK NFT minting page.
-        </p>
-        <p class="description" style="color: #ffffff"></p>
-      </div>
-    </div>
-    <div id="content_body" style="display: none">
       <div class="frame-common">
         <div>
-          <p
-            class="mintingfee"
-            style="color: var(--primary-color); font-size: 20px"
-          ></p>
-        </div>
-        <div>
-          <img class="mint-img" src="./asset/mint_bg.gif" />
-        </div>
-        <div>
-          <p
-            class="claimedcnt"
-            style="color: var(--primary-color); font-size: 20px"
-          ></p>
-        </div>
-        <div>
-          <select id="claimcount"></select>
-          <button style="margin-left: 10px" onclick="nftMint()">
-            Mint Now
-          </button>
-        </div>
-      </div>
-
-      <div id="div-mint-result" class="frame-common" style="display: none">
-        <div>
-          <p style="color: var(--primary-color); font-size: 20px">
-            <b>Mint Result</b>
+          <p style="color: #ffffff">
+            This is the Fortress Arena TANK NFT minting page.
           </p>
-        </div>
-        <div class="cards-deck-outside">
-          <div id="cards_deck" class="deck"></div>
+          <p class="description" style="color: #ffffff"></p>
         </div>
       </div>
-      <div id="div-minted-cards" class="frame-common">
-        <button
-          id="showcard-btn"
-          onclick="showMyCards()"
-          style="margin-bottom: 10px"
-        >
-          Show My Cards
-        </button>
-        <div>
-          <p
-            class="mycardscnt"
-            style="color: var(--primary-color); font-size: 20px"
-          ></p>
+      <div id="content_body" style="display: none">
+        <div id="comingsoon-div" style="display: none">
+          <div class="frame-common">
+            <h2>TANK NFT minting is not available at this time.</h2>
+          </div>
         </div>
-        <div class="cards-deck-outside">
-          <div id="minted_cards_deck" class="deck"></div>
+
+        <div id="minting-body" class="frame-common" style="display: none">
+          <div>
+            <p
+              class="mintingfee"
+              style="color: var(--primary-color); font-size: 20px"
+            ></p>
+          </div>
+          <div>
+            <img class="mint-img" src="./asset/mint_bg.gif" />
+          </div>
+          <div>
+            <p
+              class="claimedcnt"
+              style="color: var(--primary-color); font-size: 20px"
+            ></p>
+          </div>
+          <div>
+            <select id="claimcount"></select>
+            <button style="margin-left: 10px" onclick="nftMint()">
+              Mint Now
+            </button>
+          </div>
+        </div>
+
+        <div id="div-mint-result" class="frame-common" style="display: none">
+          <div>
+            <p style="color: var(--primary-color); font-size: 20px">
+              <b>Mint Result</b>
+            </p>
+          </div>
+          <div class="cards-deck-outside">
+            <div id="cards_deck" class="deck"></div>
+          </div>
+        </div>
+        <div id="div-minted-cards" class="frame-common">
+          <button
+            id="showcard-btn"
+            onclick="showMyCards()"
+            style="margin-bottom: 10px"
+          >
+            Show My Cards
+          </button>
+          <div>
+            <p
+              class="mycardscnt"
+              style="color: var(--primary-color); font-size: 20px"
+            ></p>
+          </div>
+          <div class="cards-deck-outside">
+            <div id="minted_cards_deck" class="deck"></div>
+          </div>
         </div>
       </div>
     </div>
+
     <!-- Script -->
     <script src="./js/1.2.11-web3-min.js"></script>
     <script src="./js/5.2-umd-min.js" type="application/javascript"></script>

@@ -82,7 +82,7 @@ async function startApp() {
 
 async function getAccount() {
   try {
-    getContracts();
+    await getContracts();
 
     var accounts = await web3.eth.getAccounts();
     console.log("accounts => ", accounts);
@@ -95,16 +95,27 @@ async function getAccount() {
       $(".my-address").html(getLink(myAddr, chainId));
       $("#content_body").show();
       $("#connect-btn").hide();
-      getTotalSupply();
+      await getTotalSupply();
       // getMinting Fee
       const fee_wei = await nftContract.methods.MINTING_FEE().call();
       const fee_gwei = ethers.utils.formatUnits(fee_wei, 18);
-      $(".mintingfee").html("[ " + fee_gwei + " ETH ]");
-      $(".description").html(
-        "The price of 1 TANK NFT is " +
-          fee_gwei +
-          " ETH, and you can claim up to 10 at a time."
-      );
+      console.log("mintingState =>", mintingState);
+      if (mintingState === 2) {
+        // public mint
+        $(".mintingfee").html("[ " + fee_gwei + " ETH ]");
+        $(".description").html(
+          "The price of 1 TANK NFT is " +
+            fee_gwei +
+            " ETH, and you can claim up to " +
+            multiCount +
+            " at a time."
+        );
+      } else if (mintingState === 1) {
+        // pre-mint
+        $(".description").html(
+          "You can claim up to " + multiCount + " at a time."
+        );
+      }
     } else {
       console.log("No ethereum account is available!");
       $("#div-myaddress").hide();
@@ -156,13 +167,19 @@ async function getContracts() {
   nftContract = new web3.eth.Contract(nftAbi, nftAddress);
   $(".nft-address").html(getLink(nftAddress, chainId));
   $(".opensea-address").html(getOpenSeaLink(chainId));
-  getMintingState();
+  await getMintingState();
 }
 
 async function getMintingState() {
   mintingState = await nftContract.methods.getMintingState().call();
-
-  getMultiClaimCount();
+  if (mintingState === 0 || mintingState === 3) {
+    $("#comingsoon-div").show();
+    $("#minting-body").hide();
+  } else {
+    $("#comingsoon-div").hide();
+    $("#minting-body").show();
+  }
+  await getMultiClaimCount();
 }
 
 async function getTotalSupply() {
@@ -186,10 +203,12 @@ async function getMultiClaimCount() {
   let claimcount = document.getElementById("claimcount");
   let optionItem = "";
   switch (mintingState.toString()) {
+    // pre-mint
     case "1":
       multiCount = await nftContract.methods.MAX_PRE_MULTI().call();
       break;
     case "2":
+      // public mint
       multiCount = await nftContract.methods.MAX_PUBLIC_MULTI().call();
 
       break;

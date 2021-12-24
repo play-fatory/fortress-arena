@@ -97,6 +97,17 @@ async function getAccount() {
       $("#content_body").show();
       $("#connect-btn").hide();
       await getTotalSupply();
+      if (mintingState == 1 || mintingState == 2) {
+        let sigInfo = await getPreMintSig(nftAddress, myAddr);
+        // console.log("siginfo =>", sigInfo);
+        if (sigInfo == null || sigInfo.r == undefined) {
+          $("#comingsoon-div").show();
+          $("#comingsoon-content").html(
+            '<h2 style="color:var(--second-color)">You cannot participate in minting.</h2><h3>Your address is not whitelisted.</h3>'
+          );
+          $("#minting-body").hide();
+        }
+      }
     } else {
       console.log("No ethereum account is available!");
       $("#div-myaddress").hide();
@@ -162,6 +173,7 @@ async function getMintingState() {
     $("#comingsoon-div").hide();
     $("#minting-body").show();
   }
+
   await getMultiClaimCount();
 }
 

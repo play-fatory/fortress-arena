@@ -73,9 +73,17 @@ async function startApp() {
     console.log("winHeightpx =>", winHeightpx);
     if (winWidth > winHeight) {
       if (winWidth < 1920) {
-        $("#bg-body").html(
-          '<img id="bg-image" width="auto" src="./asset/body_bg2.png" />'
-        );
+        if (winHeight > 1080) {
+          $("#bg-body").html(
+            '<img id="bg-image" height="' +
+              winHeightpx +
+              '" src="./asset/body_bg2.png" />'
+          );
+        } else {
+          $("#bg-body").html(
+            '<img id="bg-image" width="auto" src="./asset/body_bg2.png" />'
+          );
+        }
       } else {
         $("#bg-body").html(
           '<img id="bg-image" width="' +

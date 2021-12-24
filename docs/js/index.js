@@ -63,49 +63,6 @@ async function startApp() {
   console.log("startApp");
   bgImageScale();
 
-  function bgImageScale() {
-    console.log("getWindowWidth() => ", getWindowWidth());
-    console.log("getWindowHeight()=>", getWindowHeight());
-    let winWidth = getWindowWidth();
-    let winHeight = getWindowHeight();
-    const winWidthpx = winWidth + "px";
-    const winHeightpx = winHeight + "px";
-    console.log("winHeightpx =>", winHeightpx);
-    if (winWidth > winHeight) {
-      if (winWidth < 1920) {
-        if (winHeight > 1080) {
-          $("#bg-body").html(
-            '<img id="bg-image" height="' +
-              winHeightpx +
-              '" src="./asset/body_bg2.png" />'
-          );
-        } else {
-          $("#bg-body").html(
-            '<img id="bg-image" width="auto" src="./asset/body_bg2.png" />'
-          );
-        }
-      } else {
-        $("#bg-body").html(
-          '<img id="bg-image" width="' +
-            winWidthpx +
-            '" src="./asset/body_bg2.png" />'
-        );
-      }
-    } else {
-      if (winHeight < 1080) {
-        $("#bg-body").html(
-          '<img id="bg-image" height=auto src="./asset/body_bg2.png" />'
-        );
-      } else {
-        $("#bg-body").html(
-          '<img id="bg-image" height="' +
-            winHeightpx +
-            '" src="./asset/body_bg2.png" />'
-        );
-      }
-    }
-  }
-
   try {
     var currentChainId = await web3.eth.getChainId();
     chainId = currentChainId;
@@ -558,4 +515,52 @@ showCardList = async (kind, tokenIds) => {
 function viewInOpensea(tokenid) {
   // console.log("viewInOpensea =>", tokenid);
   var popup = window.open(openseaurl[chainId] + tokenid, "OpenSea");
+}
+
+function bgImageScale() {
+  console.log("getWindowWidth() => ", getWindowWidth());
+  console.log("getWindowHeight()=>", getWindowHeight());
+  let winWidth = getWindowWidth();
+  let winHeight = getWindowHeight();
+  const winWidthpx = winWidth + "px";
+  const winHeightpx = winHeight + "px";
+
+  const contentDiv = document.getElementById("content-div");
+
+  console.log("winHeightpx =>", winHeightpx);
+  if (winWidth > winHeight) {
+    if (winWidth < 1920) {
+      if (winHeight > 1080) {
+        $("#bg-body").html(
+          '<img id="bg-image" height="' +
+            winHeightpx +
+            '" src="./asset/body_bg2.png" />'
+        );
+      } else {
+        $("#bg-body").html(
+          '<img id="bg-image" width="auto" src="./asset/body_bg2.png" />'
+        );
+      }
+    } else {
+      contentDiv.style.maxWidth = "65%";
+
+      $("#bg-body").html(
+        '<img id="bg-image" width="' +
+          winWidthpx +
+          '" src="./asset/body_bg2.png" />'
+      );
+    }
+  } else {
+    if (winHeight < 1080) {
+      $("#bg-body").html(
+        '<img id="bg-image" height=auto src="./asset/body_bg2.png" />'
+      );
+    } else {
+      $("#bg-body").html(
+        '<img id="bg-image" height="' +
+          winHeightpx +
+          '" src="./asset/body_bg2.png" />'
+      );
+    }
+  }
 }

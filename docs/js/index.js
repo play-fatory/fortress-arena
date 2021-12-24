@@ -61,6 +61,19 @@ function watchChainAccount() {
 
 async function startApp() {
   console.log("startApp");
+  console.log("getWindowWidth() => ", getWindowWidth());
+  console.log("getWindowHeight()=>", getWindowHeight());
+
+  if (getWindowWidth() < 1920) {
+    $("#bg-body").html(
+      '<img id="bg-image" width="auto" src="./asset/body_bg2.png" />'
+    );
+  } else {
+    $("#bg-body").html(
+      '<img id="bg-image" width=getWindowWidth() src="./asset/body_bg2.png" />'
+    );
+  }
+
   try {
     var currentChainId = await web3.eth.getChainId();
     chainId = currentChainId;

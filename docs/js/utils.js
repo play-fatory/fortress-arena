@@ -108,3 +108,19 @@ async function getPreMintSig(contract, address) {
     return null;
   }
 }
+
+function getWindowWidth() {
+  var width =
+    window.innerWidth ||
+    document.documentElement.clientWidth ||
+    document.body.clientWidth;
+  return width;
+}
+
+function getWindowHeight() {
+  var height =
+    window.innerHeight ||
+    document.documentElement.clientHeight ||
+    document.body.clientHeight;
+  return height;
+}

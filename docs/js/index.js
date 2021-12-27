@@ -99,7 +99,7 @@ async function getAccount() {
       $("#content_body").show();
       $("#connect-btn").hide();
       await getTotalSupply();
-      if (mintingState == 1 || mintingState == 2) {
+      if (mintingState == 1) {
         let sigInfo = await getPreMintSig(nftAddress, myAddr);
         // console.log("siginfo =>", sigInfo);
         if (sigInfo == null || sigInfo.r == undefined) {

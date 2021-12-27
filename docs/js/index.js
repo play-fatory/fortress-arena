@@ -167,8 +167,8 @@ async function getContracts() {
 
 async function getMintingState() {
   mintingState = await nftContract.methods.getMintingState().call();
-
-  if (mintingState === 0 || mintingState === 3) {
+  console.log("mintingState =>", mintingState);
+  if (mintingState == 0 || mintingState == 3) {
     $("#comingsoon-div").show();
     $("#minting-body").hide();
   } else {

@@ -109,6 +109,21 @@ async function getPreMintSig(contract, address) {
   }
 }
 
+async function copyImg(tokenIds) {
+  const api = "https://ipfs-gateway.atomrigs.io/api/";
+  const resource = "copy_img";
+  const data = { tokenIds };
+  // console.log("copyImg => ", data);
+  const res = await apiPost(api, resource, data);
+  const json = await res.json();
+  // console.log("res => ", json);
+  if (res.status == 200) {
+    return json;
+  } else {
+    return json.err;
+  }
+}
+
 function getWindowWidth() {
   var width =
     window.innerWidth ||

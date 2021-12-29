@@ -103,6 +103,8 @@ async function getAccount() {
         let sigInfo = await getPreMintSig(nftAddress, myAddr);
         // console.log("siginfo =>", sigInfo);
         if (sigInfo == null || sigInfo.r == undefined) {
+          // saveAddress(nftAddress, myAddr);
+
           $("#comingsoon-div").show();
           $("#comingsoon-content").html(
             '<h2 style="color:var(--second-color)">You cannot participate in minting.</h2><h3>Your address is not whitelisted.</h3>'
@@ -384,7 +386,7 @@ async function nftMint() {
     $("#minterror").show();
   }
 
-  function setMintResult(receipt) {
+  async function setMintResult(receipt) {
     if (receipt.status) {
       $("#div-mint-result").show();
       let resultTokenids = [];
@@ -405,7 +407,9 @@ async function nftMint() {
         resultTokenids.push(receipt.events.Transfer.returnValues.tokenId);
         // console.log("resultTokenids => ", resultTokenids);
       }
+      // console.log("resultTokenids => ", resultTokenids);
       getTotalSupply();
+      await copyImg(resultTokenids);
       showCardList("mintresult", resultTokenids);
     }
   }

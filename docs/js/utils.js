@@ -45,9 +45,9 @@ function getLink(addr, chainId) {
 function getOpenSeaLink(chainId) {
   var explorer;
   if (chainId == 1) {
-    explorer = "https://testnets.opensea.io/collection/fortress-arena-nft-v4";
+    explorer = "https://testnets.opensea.io/collection/test-fortress-arena-nft";
   } else if (chainId == 4) {
-    explorer = "https://testnets.opensea.io/collection/fortress-arena-nft-v4";
+    explorer = "https://testnets.opensea.io/collection/test-fortress-arena-nft";
   } else {
     explorer = "";
     console.log("unsupported chainid " + chainId);

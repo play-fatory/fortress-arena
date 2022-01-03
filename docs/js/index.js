@@ -3,7 +3,8 @@ setTheme("aquamarine"); // initialize
 
 // let nftAddress = "0x2e9f329691be10f2d6d59f980a27dab5d560b394"; // rinkeby old
 // let nftAddress = "0xe43ed3a4fa0b9850ce4ecc3e5e550ecf7ce45d4f"; // rinkeby
-let nftAddress = "0x2391fCeF71ED00669aa9accAACbD904437C89834"; // rinkeby
+// let nftAddress = "0x2391fCeF71ED00669aa9accAACbD904437C89834"; // rinkeby
+let nftAddress = "0xD732C56BC9008272D780F339f97de79089c34f4B"; // rinkeby
 let nftContract;
 
 let chainId = 4;
@@ -20,8 +21,8 @@ let mintingState = 0; // 0:minting is not allowed , 1: pre minting , 2: public m
 let multiCount = 0;
 
 const openseaurl = {
-  1: "https://testnets.opensea.io/assets/0x2e9f329691be10f2d6d59f980a27dab5d560b394/",
-  4: "https://testnets.opensea.io/assets/0x2391fCeF71ED00669aa9accAACbD904437C89834/",
+  1: "https://testnets.opensea.io/assets/0xd732c56bc9008272d780f339f97de79089c34f4b/",
+  4: "https://testnets.opensea.io/assets/0xd732c56bc9008272d780f339f97de79089c34f4b/",
 };
 // 4: "https://testnets.opensea.io/assets/0xe43ed3a4fa0b9850ce4ecc3e5e550ecf7ce45d4f/",
 // 4: "https://testnets.opensea.io/assets/0x2e9f329691be10f2d6d59f980a27dab5d560b394/",
@@ -184,17 +185,30 @@ async function getMintingState() {
 async function getTotalSupply() {
   clearInterval(totalsupplyInterval);
 
-  const maxPublic = await nftContract.methods.MAX_PUBLIC_ID().call();
-  let totalsupply = 0;
-  totalsupply = await nftContract.methods.totalSupply().call();
-  console.log("totalsupply =>", totalsupply);
-  $(".claimedcnt").html(totalsupply + "/" + maxPublic);
+  let maxCnt = 0;
+  const foundersCnt = await nftContract.methods.FOUNDER_TANKS_COUNT().call();
+  switch (mintingState.toString()) {
+    // pre-mint
+    case "1":
+      maxCnt = await nftContract.methods.MAX_PRE_ID().call();
+      break;
+    case "2":
+      // public mint
+      maxCnt = await nftContract.methods.MAX_PUBLIC_ID().call();
+      break;
+  }
+
+  let mintedCnt = 0;
+  mintedCnt = await nftContract.methods.getCurrentPublicId().call();
+
+  console.log("mintedCnt =>", mintedCnt);
+  $(".claimedcnt").html(mintedCnt + "/" + maxCnt);
 
   // update every 2sec
   totalsupplyInterval = setInterval(async function () {
-    totalsupply = await nftContract.methods.totalSupply().call();
-    console.log("totalsupply =>", totalsupply);
-    $(".claimedcnt").html(totalsupply + "/" + maxPublic);
+    mintedCnt = await nftContract.methods.getCurrentPublicId().call();
+    console.log("mintedCnt =>", mintedCnt);
+    $(".claimedcnt").html(mintedCnt + "/" + maxCnt);
   }, 2000);
 }
 

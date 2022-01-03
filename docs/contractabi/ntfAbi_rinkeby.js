@@ -1,4 +1,4 @@
-let nftAbi = [
+let nftAbi_rinkeby = [
   {
     inputs: [
       { internalType: "address", name: "signer_", type: "address" },
@@ -168,6 +168,13 @@ let nftAbi = [
   {
     inputs: [],
     name: "MAX_COUNT",
+    outputs: [{ internalType: "uint16", name: "", type: "uint16" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "MAX_PRE_ID",
     outputs: [{ internalType: "uint16", name: "", type: "uint16" }],
     stateMutability: "view",
     type: "function",
@@ -571,6 +578,13 @@ let nftAbi = [
   {
     inputs: [{ internalType: "address", name: "tankGene_", type: "address" }],
     name: "updateGene",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "uint8", name: "_newMax", type: "uint8" }],
+    name: "updateMaxPreMulti",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",

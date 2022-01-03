@@ -1,10 +1,7 @@
 const setTheme = (theme) => (document.documentElement.className = theme);
 setTheme("aquamarine"); // initialize
 
-// let nftAddress = "0x2e9f329691be10f2d6d59f980a27dab5d560b394"; // rinkeby old
-// let nftAddress = "0xe43ed3a4fa0b9850ce4ecc3e5e550ecf7ce45d4f"; // rinkeby
-// let nftAddress = "0x2391fCeF71ED00669aa9accAACbD904437C89834"; // rinkeby
-let nftAddress = "0xD732C56BC9008272D780F339f97de79089c34f4B"; // rinkeby
+// let nftAddress = "0xD732C56BC9008272D780F339f97de79089c34f4B"; // rinkeby
 let nftContract;
 
 let chainId = 4;
@@ -24,9 +21,16 @@ const openseaurl = {
   1: "https://testnets.opensea.io/assets/0xd732c56bc9008272d780f339f97de79089c34f4b/",
   4: "https://testnets.opensea.io/assets/0xd732c56bc9008272d780f339f97de79089c34f4b/",
 };
-// 4: "https://testnets.opensea.io/assets/0xe43ed3a4fa0b9850ce4ecc3e5e550ecf7ce45d4f/",
-// 4: "https://testnets.opensea.io/assets/0x2e9f329691be10f2d6d59f980a27dab5d560b394/",
-// 4: "https://testnets.opensea.io/assets/0x33991d6d07a58cdb9ac54a0414d10f19540d1838/",
+
+const nftAddress = {
+  1: "0xD732C56BC9008272D780F339f97de79089c34f4B",
+  4: "0xD732C56BC9008272D780F339f97de79089c34f4B",
+};
+
+const nftAbi = {
+  1: ntfAbi_eth_mainnet,
+  4: nftAbi_rinkeby,
+};
 
 window.addEventListener("load", function () {
   loadWeb3();
@@ -51,19 +55,17 @@ function loadWeb3() {
 function watchChainAccount() {
   web3.currentProvider.on("accountsChanged", (accounts) => {
     startApp();
-    // showMsg("<p>Your account has been changed!</p><button onclick='location.reload()'>Reload</button>");
   });
   web3.currentProvider.on("chainChanged", (chainId) => {
-    startApp();
-    // showMsg("<p>Network (Chain) has been changed!</p><button onclick='location.reload()'>Reload</button>");
-    // console.log('aa');
+    window.location.reload();
+    // startApp();
   });
 }
 
 async function startApp() {
   console.log("startApp");
   bgImageScale();
-
+  clearInterval(totalsupplyInterval);
   try {
     var currentChainId = await web3.eth.getChainId();
     chainId = currentChainId;
@@ -101,7 +103,7 @@ async function getAccount() {
       $("#connect-btn").hide();
       await getTotalSupply();
       if (mintingState == 1) {
-        let sigInfo = await getPreMintSig(nftAddress, myAddr);
+        let sigInfo = await getPreMintSig(nftAddress[chainId], myAddr);
         // console.log("siginfo =>", sigInfo);
         if (sigInfo == null || sigInfo.r == undefined) {
           // saveAddress(nftAddress, myAddr);
@@ -162,8 +164,8 @@ function connectWallet() {
 }
 
 async function getContracts() {
-  nftContract = new web3.eth.Contract(nftAbi, nftAddress);
-  $(".nft-address").html(getLink(nftAddress, chainId));
+  nftContract = new web3.eth.Contract(nftAbi[chainId], nftAddress[chainId]);
+  $(".nft-address").html(getLink(nftAddress[chainId], chainId));
   $(".opensea-address").html(getOpenSeaLink(chainId));
   await getMintingState();
 }
@@ -300,7 +302,7 @@ async function nftMint() {
         // pre minting
         console.log("pre-Minting");
         mintMethod = "preMint";
-        let sigInfo = await getPreMintSig(nftAddress, myAddr);
+        let sigInfo = await getPreMintSig(nftAddress[chainId], myAddr);
 
         // console.log("sigInfo => ", sigInfo);
         if (sigInfo.r != null) {

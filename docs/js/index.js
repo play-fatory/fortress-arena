@@ -18,12 +18,12 @@ let mintingState = 0; // 0:minting is not allowed , 1: pre minting , 2: public m
 let multiCount = 0;
 
 const openseaurl = {
-  1: "https://testnets.opensea.io/assets/0xd732c56bc9008272d780f339f97de79089c34f4b/",
+  1: "https://opensea.io/assets/0x6466514368A0c2E1396BC3164495c6f90cBA92F6/",
   4: "https://testnets.opensea.io/assets/0xd732c56bc9008272d780f339f97de79089c34f4b/",
 };
 
 const nftAddress = {
-  1: "0xD732C56BC9008272D780F339f97de79089c34f4B",
+  1: "0x6466514368A0c2E1396BC3164495c6f90cBA92F6",
   4: "0xD732C56BC9008272D780F339f97de79089c34f4B",
 };
 
@@ -70,8 +70,8 @@ async function startApp() {
     var currentChainId = await web3.eth.getChainId();
     chainId = currentChainId;
 
-    // if (chainId == 1 || chainId == 4) {
-    if (chainId == 4) {
+    if (chainId == 1 || chainId == 4) {
+      // if (chainId == 4) {
       $("#div-network").show();
       $("#network-info").hide();
       $(".current-network").html(networkList[chainId]);
@@ -114,6 +114,12 @@ async function getAccount() {
           );
           $("#minting-body").hide();
         }
+      } else if (mintingState == 3) {
+        $("#comingsoon-div").show();
+        $("#comingsoon-content").html(
+          '<h2 style="color:var(--second-color)">The TANK NFTs minting is over.<br>Thank you !!</h3>'
+        );
+        $("#minting-body").hide();
       }
     } else {
       console.log("No ethereum account is available!");
@@ -254,14 +260,16 @@ async function getMultiClaimCount() {
       multiCount = 0;
       break;
   }
-  $(".mintingfee").html("[ " + fee_gwei + " ETH ]");
-  $(".description").html(
-    "<p>The price of 1 TANK NFT is " +
-      fee_gwei +
-      " ETH, and you can claim up to " +
-      multiCount +
-      " at a time.</p>"
-  );
+  if (mintingState == 1 || mintingState == 2) {
+    $(".mintingfee").html("[ " + fee_gwei + " ETH ]");
+    $(".description").html(
+      "<p>The price of 1 TANK NFT is " +
+        fee_gwei +
+        " ETH, and you can claim up to " +
+        multiCount +
+        " at a time.</p>"
+    );
+  }
 
   // console.log("multiCount -> ", multiCount);
 

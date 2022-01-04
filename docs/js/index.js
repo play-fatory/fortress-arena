@@ -189,28 +189,44 @@ async function getTotalSupply() {
 
   let maxCnt = 0;
   const foundersCnt = await nftContract.methods.FOUNDER_TANKS_COUNT().call();
+  let mintedCnt = 0;
+  mintedCnt = await nftContract.methods.getCurrentPublicId().call();
+  btn_mint = document.getElementById("btn_mint");
   switch (mintingState.toString()) {
     // pre-mint
     case "1":
       maxCnt = await nftContract.methods.MAX_PRE_ID().call();
+      if (mintedCnt == maxCnt) {
+        btn_mint.disabled = true;
+        showMintError("Pre-sale TANK NFTs are sold out.");
+      } else {
+        btn_mint.disabled = false;
+        $("#minterror").hide();
+      }
       break;
     case "2":
       // public mint
       maxCnt = await nftContract.methods.MAX_PUBLIC_ID().call();
+      if (mintedCnt == maxCnt) {
+        btn_mint.disabled = true;
+        showMintError("Public sale TANK NFTs are sold out.");
+      } else {
+        btn_mint.disabled = false;
+        $("#minterror").hide();
+      }
       break;
   }
-
-  let mintedCnt = 0;
-  mintedCnt = await nftContract.methods.getCurrentPublicId().call();
-
-  console.log("mintedCnt =>", mintedCnt);
   $(".claimedcnt").html(mintedCnt + "/" + maxCnt);
 
   // update every 2sec
   totalsupplyInterval = setInterval(async function () {
     mintedCnt = await nftContract.methods.getCurrentPublicId().call();
     console.log("mintedCnt =>", mintedCnt);
-    $(".claimedcnt").html(mintedCnt + "/" + maxCnt);
+    if (mintedCnt < maxCnt) {
+      $(".claimedcnt").html(mintedCnt + "/" + maxCnt);
+    } else {
+      clearInterval(totalsupplyInterval);
+    }
   }, 2000);
 }
 
@@ -397,11 +413,6 @@ async function nftMint() {
     $("#minting-loading").hide();
   }
 
-  function showMintError(content) {
-    $("#minterror").html(content);
-    $("#minterror").show();
-  }
-
   async function setMintResult(receipt) {
     if (receipt.status) {
       $("#div-mint-result").show();
@@ -425,10 +436,19 @@ async function nftMint() {
       }
       // console.log("resultTokenids => ", resultTokenids);
       getTotalSupply();
-      await copyImg(resultTokenids);
+      try {
+        await copyImg(resultTokenids);
+      } catch (error) {
+        console.log(error);
+      }
       showCardList("mintresult", resultTokenids);
     }
   }
+}
+
+function showMintError(content) {
+  $("#minterror").html(content);
+  $("#minterror").show();
 }
 
 getCardInfo = async (tokenId) => {

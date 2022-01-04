@@ -93,6 +93,7 @@ async function getPreMintSig(contract, address) {
 
 async function copyImg(tokenIds) {
   const api = "https://gateway-ipfs.atomrigs.io/api/";
+  // const resource = "copy_img";
   const resource = "copy_img";
   const data = { tokenIds };
   // console.log("copyImg => ", data);

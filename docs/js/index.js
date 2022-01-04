@@ -356,15 +356,22 @@ async function nftMint() {
               });
           } else {
             let cardcnt = parseInt(multiCount) - parseInt(minted_cnt);
+            cardcnt < 0 ? 0 : cardcnt;
+            if (cardcnt < 0) {
+              cardcnt = 0;
+            }
+            console.log("cardcnt =>", cardcnt);
             switch (cardcnt.toString()) {
               case "0":
-                showMintError("You have minted all the cards you can mint on.");
+                showMintError(
+                  "You have minted all the TANK NFTs you can mint on."
+                );
                 break;
               case "1":
-                showMintError("You can mint only " + cardcnt + " card.");
+                showMintError("You can mint only " + cardcnt + " TANK NFT.");
                 break;
               default:
-                showMintError("You can mint only " + cardcnt + " cards.");
+                showMintError("You can mint only " + cardcnt + " TANK NFT.");
                 break;
             }
 
@@ -540,7 +547,7 @@ showCardList = async (kind, tokenIds) => {
           break;
         case "mintedcards":
           $("#showcard-btn").hide();
-          $(".mycardscnt").html("My Cards : " + arr.length);
+          $(".mycardscnt").html("My TANK NFTs : " + arr.length);
 
           document.getElementById("minted_cards_deck").appendChild(card);
           break;

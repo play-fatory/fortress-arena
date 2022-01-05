@@ -102,6 +102,7 @@ async function getAccount() {
       $("#content_body").show();
       $("#connect-btn").hide();
       await getTotalSupply();
+
       if (mintingState == 1) {
         let sigInfo = await getPreMintSig(nftAddress[chainId], myAddr);
         // console.log("siginfo =>", sigInfo);
@@ -194,40 +195,18 @@ async function getTotalSupply() {
   clearInterval(totalsupplyInterval);
 
   let maxCnt = 0;
-  const foundersCnt = await nftContract.methods.FOUNDER_TANKS_COUNT().call();
   let mintedCnt = 0;
   mintedCnt = await nftContract.methods.getCurrentPublicId().call();
-  btn_mint = document.getElementById("btn_mint");
-  switch (mintingState.toString()) {
-    // pre-mint
-    case "1":
-      maxCnt = await nftContract.methods.MAX_PRE_ID().call();
-      if (mintedCnt == maxCnt) {
-        btn_mint.disabled = true;
-        showMintError("Pre-sale TANK NFTs are sold out.");
-      } else {
-        btn_mint.disabled = false;
-        $("#minterror").hide();
-      }
-      break;
-    case "2":
-      // public mint
-      maxCnt = await nftContract.methods.MAX_PUBLIC_ID().call();
-      if (mintedCnt == maxCnt) {
-        btn_mint.disabled = true;
-        showMintError("Public sale TANK NFTs are sold out.");
-      } else {
-        btn_mint.disabled = false;
-        $("#minterror").hide();
-      }
-      break;
-  }
+  maxCnt = await checkMintingState(mintedCnt);
+
   $(".claimedcnt").html(mintedCnt + "/" + maxCnt);
 
   // update every 2sec
   totalsupplyInterval = setInterval(async function () {
     mintedCnt = await nftContract.methods.getCurrentPublicId().call();
-    console.log("mintedCnt =>", mintedCnt);
+    // console.log("mintedCnt =>", mintedCnt);
+    maxCnt = await checkMintingState(mintedCnt);
+    // console.log("maxCnt => ", maxCnt);
     if (mintedCnt < maxCnt) {
       $(".claimedcnt").html(mintedCnt + "/" + maxCnt);
     } else {
@@ -236,6 +215,49 @@ async function getTotalSupply() {
   }, 2000);
 }
 
+async function checkMintingState(_mintedCnt) {
+  let maxCnt = 0;
+  const foundersCnt = await nftContract.methods.FOUNDER_TANKS_COUNT().call();
+  btn_mint = document.getElementById("btn_mint");
+  switch (mintingState.toString()) {
+    case "0":
+      if (_mintedCnt < foundersCnt + 1) {
+        $("#comingsoon-content").html(
+          '<h2 style="color:var(--second-color)">Pre-sale on Ethereum mainnet will start on 1:00 PM January 6th, 2022 (UTC).</h3>'
+        );
+      } else {
+        $("#comingsoon-content").html(
+          '<h2 style="color:var(--second-color)">TANK NFT minting is not available at this time.</h3>'
+        );
+      }
+      break;
+    // pre-mint
+    case "1":
+      maxCnt = await nftContract.methods.MAX_PRE_ID().call();
+      if (_mintedCnt == maxCnt) {
+        btn_mint.disabled = true;
+        showMintError(
+          "Pre-sale TANK NFTs are sold out.<br>Public sale will start on 5:00 PM January 6th, 2022 (UTC)"
+        );
+      } else {
+        btn_mint.disabled = false;
+        $("#minterror").hide();
+      }
+      break;
+    case "2":
+      // public mint
+      maxCnt = await nftContract.methods.MAX_PUBLIC_ID().call();
+      if (_mintedCnt == maxCnt) {
+        btn_mint.disabled = true;
+        showMintError("Public sale TANK NFTs are sold out.");
+      } else {
+        btn_mint.disabled = false;
+        $("#minterror").hide();
+      }
+      break;
+  }
+  return maxCnt;
+}
 async function getMultiClaimCount() {
   let claimcount = document.getElementById("claimcount");
   let optionItem = "";
@@ -315,10 +337,11 @@ async function nftMint() {
     console.log("mintingState -> ", mintingState);
     // getMinting Fee
     const fee_wei = await nftContract.methods.MINTING_FEE().call();
-    const fee_gwei = ethers.utils.formatUnits(fee_wei, 18);
-
     const mintingCount = $("#claimcount option:selected").val();
-    const total_mintingfee = parseFloat(fee_gwei) * parseFloat(mintingCount);
+
+    const wei_value = ethers.BigNumber.from(fee_wei).mul(mintingCount);
+    const total_mintingfee = ethers.utils.formatEther(wei_value);
+
     // console.log("total_mintingfee =>", total_mintingfee);
 
     switch (mintingState.toString()) {

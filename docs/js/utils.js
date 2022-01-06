@@ -76,7 +76,7 @@ async function apiPost(host, resource, data, accessToken) {
 }
 
 async function getPreMintSig(contract, address) {
-  let api = "https://gateway-ipfs.atomrigs.io/api/";
+  const api = "https://gateway1-ipfs.atomrigs.io/api/";
   const resource = "get_sig";
   data = { contract, address, method: "preMint" };
   res = await apiPost(api, resource, data);
@@ -92,7 +92,7 @@ async function getPreMintSig(contract, address) {
 }
 
 async function copyImg(tokenIds) {
-  const api = "https://gateway-ipfs.atomrigs.io/api/";
+  const api = "https://gateway1-ipfs.atomrigs.io/api/";
   // const resource = "copy_img";
   const resource = "copy_img";
   const data = { tokenIds };
@@ -108,7 +108,7 @@ async function copyImg(tokenIds) {
 }
 
 async function checkWhiteList(contract, address) {
-  let api = "https://gateway-ipfs.atomrigs.io/api/";
+  const api = "https://gateway1-ipfs.atomrigs.io/api/";
   const resource = "check_white_list";
   data = { contract, address, method: "preMint" };
   res = await apiPost(api, resource, data);

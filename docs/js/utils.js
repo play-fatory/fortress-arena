@@ -150,9 +150,6 @@ const countDownTimer = function (id, date) {
   function showRemaining() {
     var now = new Date();
     var distDt = _vDate - now;
-    console.log("showRemaining date => ", date);
-    console.log("showRemaining now => ", now);
-    console.log("showRemaining distDT => ", distDt);
     if (distDt <= 0) {
       clearInterval(timer);
       document.getElementById("div-countdown").style.display = "none";
@@ -175,5 +172,7 @@ const countDownTimer = function (id, date) {
   timer = setInterval(showRemaining, 1000);
 };
 
-countDownTimer("countdown", "2022-01-06T13:00:00.000Z");
-// countDownTimer("countdown", "01/06/2022 12:33 PM");
+function convDatetoTime(date) {
+  let convDate = new Date(date);
+  return convDate;
+}

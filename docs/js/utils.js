@@ -138,3 +138,42 @@ function getWindowHeight() {
     document.body.clientHeight;
   return height;
 }
+
+const countDownTimer = function (id, date) {
+  var _vDate = new Date(date);
+  var _second = 1000;
+  var _minute = _second * 60;
+  var _hour = _minute * 60;
+  var _day = _hour * 24;
+  var timer;
+
+  function showRemaining() {
+    var now = new Date();
+    var distDt = _vDate - now;
+    console.log("showRemaining date => ", date);
+    console.log("showRemaining now => ", now);
+    console.log("showRemaining distDT => ", distDt);
+    if (distDt <= 0) {
+      clearInterval(timer);
+      document.getElementById("div-countdown").style.display = "none";
+      return;
+    }
+    var days = Math.floor(distDt / _day);
+    var hours = Math.floor((distDt % _day) / _hour);
+    var minutes = Math.floor((distDt % _hour) / _minute);
+    var seconds = Math.floor((distDt % _minute) / _second);
+
+    if (days > 0) {
+      document.getElementById(id).textContent = days + "Day ";
+      document.getElementById(id).textContent += hours + " : ";
+    } else {
+      document.getElementById(id).textContent = hours + " : ";
+    }
+    document.getElementById(id).textContent += minutes + " : ";
+    document.getElementById(id).textContent += seconds + "";
+  }
+  timer = setInterval(showRemaining, 1000);
+};
+
+countDownTimer("countdown", "2022-01-06T13:00:00.000Z");
+// countDownTimer("countdown", "01/06/2022 12:33 PM");

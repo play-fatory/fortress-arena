@@ -66,7 +66,7 @@ function watchChainAccount() {
 
 async function startApp() {
   console.log("startApp");
-  clearInterval(totalsupplyInterval);
+  // clearInterval(totalsupplyInterval);
   try {
     var currentChainId = await web3.eth.getChainId();
     chainId = currentChainId;
@@ -193,7 +193,7 @@ async function getMintingState() {
 }
 
 async function getTotalSupply() {
-  clearInterval(totalsupplyInterval);
+  // clearInterval(totalsupplyInterval);
 
   let maxCnt = 0;
   let mintedCnt = 0;
@@ -203,18 +203,18 @@ async function getTotalSupply() {
   $(".claimedcnt").html(mintedCnt + "/" + maxCnt);
 
   // update every 2sec
-  totalsupplyInterval = setInterval(async function () {
-    mintedCnt = await nftContract.methods.getCurrentPublicId().call();
-    // console.log("mintedCnt =>", mintedCnt);
-    maxCnt = await checkMintingState(mintedCnt);
-    // console.log("maxCnt => ", maxCnt);
-    if (parseInt(mintedCnt) < parseInt(maxCnt)) {
-      $(".claimedcnt").html(mintedCnt + "/" + maxCnt);
-    } else {
-      $(".claimedcnt").html(mintedCnt + "/" + maxCnt);
-      clearInterval(totalsupplyInterval);
-    }
-  }, 2000);
+  // totalsupplyInterval = setInterval(async function () {
+  //   mintedCnt = await nftContract.methods.getCurrentPublicId().call();
+  //   // console.log("mintedCnt =>", mintedCnt);
+  //   maxCnt = await checkMintingState(mintedCnt);
+  //   // console.log("maxCnt => ", maxCnt);
+  //   if (parseInt(mintedCnt) < parseInt(maxCnt)) {
+  //     $(".claimedcnt").html(mintedCnt + "/" + maxCnt);
+  //   } else {
+  //     $(".claimedcnt").html(mintedCnt + "/" + maxCnt);
+  //     clearInterval(totalsupplyInterval);
+  //   }
+  // }, 2000);
 }
 
 async function checkMintingState(_mintedCnt) {

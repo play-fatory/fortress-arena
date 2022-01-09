@@ -19,9 +19,12 @@ li {
 }
 
 .content-div {
-  max-width: 800px;
+  max-width: 1000px;
   width: 100%;
 }
-.mint-img {
-  width: 300px;
+
+.img-div {
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
